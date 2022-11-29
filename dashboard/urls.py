@@ -2,11 +2,12 @@ from django.urls import path
 from . import views
 from .views import home_view,book_appointment_view,available_doctors_view,doctor_availability_view,successfully_booked_appointment_view,patient_medical_history_view,patient_views_appointment_view
 
-from .views import home_view,book_appointment_view,available_doctors_view, payslip,medical_record_view,medical_record_suc,medrecordsearch,medrecordview,doctorappointments,adminstats
+from .views import home_view,book_appointment_view,available_doctors_view, payslip,medical_record_view,medical_record_suc,medrecordsearch,medrecordview,doctorappointments,adminstats,docview
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('',home_view,name = 'home'),
+    path('docview/',docview,name = 'docview'),
     path('bookappointment/',book_appointment_view,name = 'bookappointment'),
     path('patientappointment/',patient_views_appointment_view,name = 'patientappointment'),
     path('bookappointment/availabledoctors/',available_doctors_view,name = 'availabledoctors'),

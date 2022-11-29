@@ -8,13 +8,29 @@ from datetime import date
 from django.utils.dateparse import parse_date
 
 
+def docview(request):
+    return render(request, 'dashboard/doctorbase.html')
+
+
 # Create your views here.
 def home_view(request):
     if request.user.is_superuser:
         return HttpResponse('')
         
     if request.user.is_staff:
-        return render(request, 'dashboard/employeehome.html')
+        current_user = request.user
+        us = current_user.username
+        with connection.cursor() as cursor:
+            cursor.execute("select count(*) as count from online_appointment o join appointment a on o.appid = a.appid where appointment_date >= sysdate and  employeeid = %s",[us])
+            query1 = cursor.fetchone()
+            cursor.execute("select  count(*) as count from offline_appointment o join appointment a on o.appid = a.appid where appointment_date >= sysdate and   employeeid =%s",[us])
+            query2 = cursor.fetchone()
+            cursor.execute("select count(distinct patientID) as count from appointment where employeeID = %s",[us])
+            query3 = cursor.fetchone()
+            cursor.execute("select count(employeeID) from employee where deptID = (select deptID from employee where employeeID = %s)",[us])
+            query4 = cursor.fetchone()
+            print(type(query1))
+        return render(request, 'dashboard/employeehome.html',{'query1':query1,'query2':query2,'query3':query3,'query4':query4})
         
 
     else:
@@ -248,16 +264,18 @@ def medrecordview(request):
              print(date)
              cursor.execute("select p.patientID, firstname, lastname, age, gender, diagnosis, knowndisease from patient p join medical_record m on p.patientID = m.patientID where p.patientID = %s",[patientid])
              query = dictfetchall(cursor)
-             print(type(query))
-        return render(request, 'dashboard/medrecordview.html',{'query' : query})
+             cursor.execute("select firstname from patient p join medical_record m on p.patientID = m.patientID where p.patientID = %s",[patientid])
+             query2 = cursor.fetchone()
+
+        return render(request, 'dashboard/medrecordview.html',{'query' : query,'query2':patientid})
 
 def doctorappointments(request):
     current_user = request.user
     us = current_user.username
     with connection.cursor() as cursor:
-        cursor.execute("select a.appid, firstname, lastname, age, gender, phoneno,  meetinglink, appointment_date, appointment_time from appointment a join patient p on a.patientid = p.patientid join online_appointment oa on a.appid = oa.appid WHERE employeeid = %s",[us])
+        cursor.execute("select a.appid, firstname, lastname, age, gender, phoneno,  meetinglink, to_char(appointment_date, 'DD-MON-YYYY') as appdate, appointment_time from appointment a join patient p on a.patientid = p.patientid join online_appointment oa on a.appid = oa.appid WHERE employeeid = %s",[us])
         query = dictfetchall(cursor)
-        cursor.execute("select a.appid, firstname, lastname, age, gender, phoneno,cabinno, appointment_date, appointment_time from appointment a join patient p on a.patientid = p.patientid join offline_appointment oa on a.appid = oa.appid WHERE employeeid = 'prav'")
+        cursor.execute("select a.appid, firstname, lastname, age, gender, phoneno,cabinno, to_char(appointment_date, 'DD-MON-YYYY') as appdate, appointment_time from appointment a join patient p on a.patientid = p.patientid join offline_appointment oa on a.appid = oa.appid WHERE employeeid  = %s",[us])
         offquery = dictfetchall(cursor)
         print(offquery)
     return render(request, 'dashboard/doctorappointments.html',{'query' : query,'offquery':offquery})
