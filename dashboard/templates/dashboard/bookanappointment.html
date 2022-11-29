@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Book an Appointment</title>
-</head>
-<body>
-	<h1>Book an Appointment</h1>
-	<h2>Pick a Department</h2>
-	<form action = "availabledoctors">
+{% extends 'dashboard/PatientBase.html'%}
+
+{%block content%}
+<div class = "container">
+
+<div class="card">
+  <div class="card-header">
+    Book an Appointment
+  </div>
+  <div class="card-body">
+    <form action = "availabledoctors">
 		<select name = "departments">
 		<option disabled =true selected>--Select Department Name</option> 
 		
@@ -23,8 +23,14 @@
 
 
 	</form>
-	
+  </div>
+</div>
+
+
+</div>
+
+{%endblock content%}
+
 	
 			
-</body>
-</html>
+

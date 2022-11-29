@@ -186,17 +186,21 @@ def patient_views_appointment_view(request):
     	current_user = request.user
     	us = current_user.username
     	with connection.cursor() as cursor:
+            cursor.execute("select firstname, lastname, email, meetinglink, to_char(appointment_date, 'DD-MON-YYYY') as appdate,appointment_time from appointment a join employee e on a.employeeid = e.employeeid join online_appointment oa on a.appid = oa.appid WHERE patientid = %s",[us])
+            query = dictfetchall(cursor)
+            cursor.execute("select a.appid, firstname, lastname, email, to_char(appointment_date, 'DD-MON-YYYY') as appdate,appointment_time, cabinno from appointment a join employee e on a.employeeid = e.employeeid join offline_appointment oa on a.appid = oa.appid WHERE patientid = %s",[us])
+            query2 = dictfetchall(cursor)
 	        # cursor.execute("select firstname, lastname, email, meetinglink, appointment_date,appointment_time from appointment a join employee e on a.employeeid = e.employeeid join online_appointment oa on a.appid = oa.appid WHERE patientid = %s",[us])
-	        cursor.execute("select firstname, lastname, email, meetinglink, to_char(appointment_date, 'DD-MON-YYYY') as appdate,appointment_time from appointment a join employee e on a.employeeid = e.employeeid join online_appointment oa on a.appid = oa.appid WHERE patientid = %s",[us])
-	        query = dictfetchall(cursor)
 
-    	
+
+           
+    	   
     	
     	
 
 	    
     	print(query)
-    	return render(request, 'dashboard/patientappointments.html',{'query':query})
+    	return render(request, 'dashboard/patientappointments.html',{'query':query,'query2':query2})
 ##should change the if condition because the patient can also see the payslip 
 def payslip(request):
     if request.user.is_superuser:
