@@ -7,6 +7,8 @@ from django.db import connection
 from django import forms
 import json
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
 
 # Create your views here.
 
@@ -26,6 +28,8 @@ def registerpatient(request):
 		form = PatientRegisterForm()
 	return render(request, 'accounts/patient_registration.html',{'form':form})
 
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/login/')
 def patientprofile(request):
     # print(pform.instance.my_field)
     
@@ -131,13 +135,11 @@ def patientprofile(request):
 # 		pform = PatientProfileUpdateForm()
 # 	return render(request, 'accounts/patient_profile.html',{'pform':pform})
 	
-def commit(request):
-	with connection.cursor() as cursor:
-	        cursor.execute("commit");
-	return HttpResponse('')           
+        
 
 	       
-
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')
 def employeeprofile(request):
     # print(pform.instance.my_field)
     

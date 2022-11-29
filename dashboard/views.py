@@ -6,6 +6,7 @@ from django.utils import timezone
 import datetime
 from datetime import date
 from django.utils.dateparse import parse_date
+from django.views.decorators.cache import cache_control
 
 
 def docview(request):
@@ -13,6 +14,8 @@ def docview(request):
 
 
 # Create your views here.
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')
 def home_view(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -51,6 +54,8 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/login/')
 def book_appointment_view(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -66,7 +71,8 @@ def book_appointment_view(request):
 
 	        return render(request, 'dashboard/bookanappointment.html',{'query': query})
     
-
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/login/')
 def available_doctors_view(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -86,7 +92,8 @@ def available_doctors_view(request):
     	
     	return render(request, 'dashboard/available_doctors.html',{'query' : query})
   
-
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/login/')
 def doctor_availability_view(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -117,7 +124,8 @@ def doctor_availability_view(request):
     	
     	return render(request, 'dashboard/doctor_availability.html',{'dates':dates,'result2':result2})
 
-
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/login/')
 def successfully_booked_appointment_view(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -149,7 +157,8 @@ def successfully_booked_appointment_view(request):
     	return render(request, 'dashboard/appointmentbookedsuccessfully.html')
 
 
-
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/login/')
 def patient_medical_history_view(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -173,7 +182,8 @@ def patient_medical_history_view(request):
     	print(query)
     	return render(request, 'dashboard/patientmedicalhistory.html',{'query':query})
 
-
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/login/')
 def patient_views_appointment_view(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -202,6 +212,9 @@ def patient_views_appointment_view(request):
     	print(query)
     	return render(request, 'dashboard/patientappointments.html',{'query':query,'query2':query2})
 ##should change the if condition because the patient can also see the payslip 
+
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')
 def payslip(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -215,7 +228,8 @@ def payslip(request):
             print(query)
         return render(request, 'dashboard/payslip.html',{'query' : query})
 
-
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')
 def docmedicalrecord(request):
     if request.user.is_superuser:
         return HttpResponse('')
@@ -231,11 +245,14 @@ def docmedicalrecord(request):
 
 
 
-
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')
 def medical_record_view(request):
     # print(pform.instance.my_field)
     return render(request,'dashboard/docmedicalrecord.html') 
- 
+
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/') 
 def medical_record_suc(request):
     print(request)
     if(request.method== 'POST'):
@@ -252,11 +269,16 @@ def medical_record_suc(request):
              query = "INSERT into medical_record (diagnosis,knowndisease,patientid,recorddate) values (%s,%s,%s,%s)"
              cursor.execute(query, [diagnosis,knowndisease,patientid,date])
         return render(request, 'dashboard/medrecordsuccess.html')
-            
+
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')            
 def medrecordsearch(request):
     # print(pform.instance.my_field)
     return render(request,'dashboard/medrecordsearch.html') 
 
+
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')
 def medrecordview(request):
     print(request)
     if(request.method== 'GET'):
@@ -273,6 +295,8 @@ def medrecordview(request):
 
         return render(request, 'dashboard/medrecordview.html',{'query' : query,'query2':patientid})
 
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')
 def doctorappointments(request):
     current_user = request.user
     us = current_user.username
@@ -284,6 +308,8 @@ def doctorappointments(request):
         print(offquery)
     return render(request, 'dashboard/doctorappointments.html',{'query' : query,'offquery':offquery})
 
+@cache_control(no_cache=True, must_revalidate=True,no_store=True)
+@login_required(login_url='/employeelogin/')
 def adminstats(request):
     if request.user.is_superuser:
         with connection.cursor() as cursor:
