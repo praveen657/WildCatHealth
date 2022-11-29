@@ -1,18 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Patient Home</title>
-</head>
-<body>
-	<p>Patient Home</p>
-	{% for x in query %}
-		<p>{{x.BILL_PAID}}</p>
-		<p>{{x.BILL_DUE}}</p>
-		<p>{{x.TOTAL_BILL}}</p>
-	{% endfor %}
-	<a class="nav-link" href="{% url 'logout' %}">Logout</a>
-	<a class="nav-link" href="{% url 'bookappointment' %}">Book an appointment</a>
-</body>
-</html>
+{% extends 'dashboard/PatientBase.html' %}
+
+{%block content%}
+
+<div class = "container">
+<div class="jumbotron">
+		<div class="row">
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+      	{% for x in query %}
+        <h5 class="card-title">${{x.BILL_DUE}}</h5>
+        
+        <p class="card-text">BILL DUE</p>
+        {% endfor %}
+        
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+      	 {% for x in query %}
+        <h5 class="card-title">${{x.BILL_PAID}}</h5>
+       
+        <p class="card-text">BILL PAID</p>
+        {% endfor %}
+        
+      </div>
+    </div>
+  </div>
+
+
+<div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+      	{% for x in query %}
+        <h5 class="card-title">${{x.TOTAL_BILL}}</h5>
+        
+        <p class="card-text">TOTAL BILL</p>
+        {% endfor %}
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+	</div>
+</div>
+
+{% endblock content %}
+</div>
+
+
+	
+	
+
+
