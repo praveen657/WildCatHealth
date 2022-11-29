@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Book an Appointment</title>
+</head>
+<body>
+	<h1>Available doctors</h1>
+	<h2>Select a doctor</h2>
+	
+		<form action = "doctoravailability">
+			{% for x in query %}
+			
+			<h2 name = "employeeid">{{x.EMPLOYEEID}}</h2>
+			<input type="text" name="employeeid" value = {{x.EMPLOYEEID}}>
+			<h3>{{x.FIRSTNAME}}</h3>	
+			<input type="submit" name="" value = "Book an appointment">
+			
+			{% endfor %}	
+			
+
+
+		</form>
+		
+			
+</body>
+</html>
