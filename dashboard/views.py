@@ -7,7 +7,7 @@ import datetime
 from datetime import date
 from django.utils.dateparse import parse_date
 from django.views.decorators.cache import cache_control
-
+from django.contrib.auth.decorators import login_required
 
 def docview(request):
     return render(request, 'dashboard/doctorbase.html')
@@ -71,6 +71,7 @@ def book_appointment_view(request):
 
 	        return render(request, 'dashboard/bookanappointment.html',{'query': query})
     
+
 @cache_control(no_cache=True, must_revalidate=True,no_store=True)
 @login_required(login_url='/login/')
 def available_doctors_view(request):
@@ -155,6 +156,10 @@ def successfully_booked_appointment_view(request):
 	        
     	
     	return render(request, 'dashboard/appointmentbookedsuccessfully.html')
+
+
+
+
 
 
 @cache_control(no_cache=True, must_revalidate=True,no_store=True)
