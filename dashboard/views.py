@@ -8,8 +8,6 @@ from datetime import date
 from django.utils.dateparse import parse_date
 
 
-def docview(request):
-    return render(request, 'dashboard/doctorbase.html')
 
 
 # Create your views here.
@@ -65,7 +63,81 @@ def book_appointment_view(request):
 	        query = dictfetchall(cursor)
 
 	        return render(request, 'dashboard/bookanappointment.html',{'query': query})
+
+
+def highestpaid(request):
+    if request.user.is_superuser:
+        return HttpResponse('')
+        
+    if request.user.is_staff:
+        return HttpResponse('')
+        
+
+    else:
+    	with connection.cursor() as cursor:
+	        cursor.execute("select distinct DEPTNAME FROM DEPARTMENT")
+	        query = dictfetchall(cursor)
+
+	        return render(request, 'dashboard/adminstats-highestpaidsearch.html',{'query': query})
     
+def highestpaidres(request):
+    if request.user.is_superuser:
+        return HttpResponse('')
+        
+    if request.user.is_staff:
+        return HttpResponse('')
+        
+
+    else:
+    	result = request.GET["departments"]
+    	print(result)
+    	with connection.cursor() as cursor:
+	        cursor.execute("select EmployeeID, e.deptID, DeptName as Department_Name ,firstname as Employee_First_Name , lastname as Employee_Last_Name, Age, Gender, Designation, salary, row_number() over (partition by e.deptID order by salary desc) from employee e join  department d on e.deptid = d.deptid where DeptName= %s",[result])
+	        query = dictfetchall(cursor)
+
+	    
+    	
+    	return render(request, 'dashboard/adminstats-highestpaid.html',{'query' : query,'query1' : result})
+
+    
+
+def adminappointment(request):
+    if request.user.is_superuser:
+        return HttpResponse('')
+        
+    if request.user.is_staff:
+        return HttpResponse('')
+        
+
+    else:
+    	with connection.cursor() as cursor:
+	        cursor.execute("select distinct DEPTNAME FROM DEPARTMENT")
+	        query = dictfetchall(cursor)
+
+	        return render(request, 'dashboard/adminstats-appointmentsearch.html',{'query': query})
+
+
+def adminappointmentres(request):
+    if request.user.is_superuser:
+        return HttpResponse('')
+        
+    if request.user.is_staff:
+        return HttpResponse('')
+        
+
+    else:
+    	result = request.GET["departments"]
+    	print(result)
+    	with connection.cursor() as cursor:
+	        cursor.execute("with dept_appointment as ( select deptname, e.firstname, e.lastname, count(*) as no_of_appointments from appointment a join employee e on a.employeeid = e.employeeid join department d on e.deptid = d.deptid group by deptname, e.firstname, e.lastname) select * from dept_appointment where deptname = %s order by no_of_appointments desc",[result])
+	        query = dictfetchall(cursor)
+
+	    
+    	
+    	return render(request, 'dashboard/adminstats-appointment.html',{'query' : query,'query1' : result})
+
+    
+
 
 def available_doctors_view(request):
     if request.user.is_superuser:
@@ -272,6 +344,48 @@ def medrecordview(request):
              query2 = cursor.fetchone()
 
         return render(request, 'dashboard/medrecordview.html',{'query' : query,'query2':patientid})
+
+def patientbillsearch(request):
+    # print(pform.instance.my_field)
+    return render(request,'dashboard/adminstats-patientbillsearch.html') 
+
+def patientbillview(request):
+    print(request)
+    if(request.method== 'GET'):
+        patientid = request.GET['patientid']
+        current_user = request.user
+        us = current_user.username
+        with connection.cursor() as cursor:
+             date = datetime.datetime.now().date()
+             print(date)
+             cursor.execute("with due_bill as ( select patientID, sum(pbamount) as Bill_Due from Patient_bill where PBstatus = 'Pending' group by patientID having sum(pbamount) > %s) select p.PatientID, firstname, lastname, age, gender, phoneno, Bill_Due from patient p join due_bill d on p.patientId = d.patientID order by Bill_Due desc",[patientid])
+             query = dictfetchall(cursor)
+
+        return render(request, 'dashboard/adminstats-patientbill.html',{'query' : query,'query2':patientid})
+
+def equipment(request):
+    # print(pform.instance.my_field)
+    return render(request,'dashboard/adminstats-equipmentsearch.html') 
+
+def equipmentview(request):
+    print(request)
+    if(request.method== 'GET'):
+        patientid = request.GET['patientid']
+        current_user = request.user
+        us = current_user.username
+        with connection.cursor() as cursor:
+             date = datetime.datetime.now().date()
+             print(date)
+             cursor.execute("select vendorname, equipname, to_char(manufacturingdate, 'DD-MON-YYYY') as appdate, quantity, unitprice, (quantity*unitprice) as Pending_Order_Amount, status from PRODUCT_ORDER_DETAILS d join product p on d.prodid = p.prodid join equipment e on p.prodid = e.prodid join vendor v on d.vendorid = v.vendorid where status in ('Shipped', 'Packed') and prodtype = 'EQUIPMENT' and (quantity*unitprice) > %s order by Pending_Order_Amount desc",[patientid])
+             query = dictfetchall(cursor)
+
+        return render(request, 'dashboard/adminstats-equipment.html',{'query' : query,'query2':patientid})
+
+
+ 
+ 
+
+
 
 def doctorappointments(request):
     current_user = request.user

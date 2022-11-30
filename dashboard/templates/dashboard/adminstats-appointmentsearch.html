@@ -1,6 +1,4 @@
 
-
-
 {% comment %} {% extends 'dashboard/doctorbase.html'%}
 
 
@@ -484,35 +482,35 @@
     </div>
       <ul class="nav-links">
         <li>
-          <a href="{% url 'adminstats' %}" class="active" >
+          <a href="{% url 'home' %}" >
             <i class='bx bx-grid-alt' ></i>
             <span class="links_name">Dashboard</span>
           </a>
         </li>
         <li>
-          <a href="{% url 'adminstats-patientbillsearch' %}">
+          <a href="{% url 'employeeprofile' %}">
             <i class='bx bx-box' ></i> 
-            <span class="links_name">Patient Bill</span>
+            <span class="links_name">My Profile</span>
           </a>
         </li>
         <li>
-          <a href="{% url 'adminstats-equipmentsearch' %}" >
+          <a href="{% url 'payslip' %}" >
             <i class='bx bx-list-ul' ></i>
-            <span class="links_name">Equip Detials</span>
-          </a>
-        </li>
-        {% comment %} <li>
-          <a href="{% url 'adminstats-highestpaidsearch' %}">
-            <i class='bx bx-pie-chart-alt-2' ></i>
-            <span class="links_name">High Paid</span>
+            <span class="links_name">Payslip</span>
           </a>
         </li>
         <li>
-          <a href="{% url 'adminstats-appointmentsearch' %}" >
-            <i class='bx bx-coin-stack' ></i>
-            <span class="links_name">App Search</span>
+          <a href="{% url 'doctorappointments' %}">
+            <i class='bx bx-pie-chart-alt-2' ></i>
+            <span class="links_name">Appointments</span>
           </a>
-        </li> {% endcomment %}
+        </li>
+        <li>
+          <a href="{% url 'medrecordsearch' %}" class="active">
+            <i class='bx bx-coin-stack' ></i>
+            <span class="links_name">Medical Records</span>
+          </a>
+        </li>
 
 
         <li class="employeelogout">
@@ -541,8 +539,22 @@
     </nav>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<form action = "adminstats-appointment" style="margin-left:30px">
+    <select name = "departments">
+    <option disabled =true selected>--Select Department</option> 
+    
+        {% for x in query %}
+        <option><h3>{{x.DEPTNAME}}</h3></option>
+        {% endfor %}
+    
+    </select>
+    <input type="submit" name="" value = "Search">
 
-
+</form>
 
  {% comment %} {% for x in query %}
 <h3>First Name :{{x.FIRSTNAME}}</h3>
@@ -557,114 +569,6 @@
 <br>
 <br>
 <br> {% endcomment %}
-<br>
-<br>
-
-<div class="container">
-    <h4 >Patients with pending Bill > 5000</h4><br> 
-    <table class="table thead-light ">
-      <thead>
-        <tr>
-          <th>PATIENTID </th>
-          <th>FIRSTNAME</th>
-          <th>LASTNAME</th>
-          <th>AGE</th>
-          <th>GENDER </th>
-          <th>PHONENO</th>
-          <th>BILL_DUE</th>
-        </tr>
-      </thead>
-      <tbody>
-      <!-- jinja2 Technique -->
-    
-      {% for i in query %}
-        <tr>
-          
-          <td>{{i.PATIENTID}}</td>
-          <td>{{i.FIRSTNAME}}</td>
-          <td>{{i.LASTNAME}}</td>
-          <td>{{i.AGE}}</td>
-          <td>{{i.GENDER}}</td>
-          <td>{{i.PHONENO}}</td>
-          <td>{{i.BILL_DUE}}</td>
-        </tr>
-      {% endfor %}
- 
-      </tbody>
-    </table>
-  </div>
-    
-  <div class="container">
-    <h4>Appointments in each department</h4><br> 
-    <table class="table thead-light ">
-      <thead>
-        <tr>
-          <th>DEPTNAME </th>
-          <th>EMPLOYEE_FIRSTNAME</th>
-          <th>EMPLOYEE_LASTNAME</th>
-          <th>APPOINTMENTID</th>
-          <th>PATIENTID </th>
-          <th>APPOINTMENT_DATE</th>
-          <th>APPOINTMENT_TIME</th>
-        </tr>
-      </thead>
-      <tbody>
-      <!-- jinja2 Technique -->
-    
-      {% for i in query1 %}
-        <tr>
-          
-          <td>{{i.DEPTNAME}}</td>
-          <td>{{i.EMPLOYEE_FIRSTNAME}}</td>
-          <td>{{i.EMPLOYEE_LASTNAME}}</td>
-          <td>{{i.APPOINTMENTID}}</td>
-          <td>{{i.PATIENTID}}</td>
-          <td>{{i.APPOINTMENT_DATE}}</td>
-          <td>{{i.APPOINTMENT_DATE}}</td>
-        </tr>
-      {% endfor %}
- 
-      </tbody>
-    </table>
-  </div>
-
-  <div class="container">
-    <h4>Highest Paid Medical Staff in each Department</h4><br> 
-    <table class="table thead-light ">
-      <thead>
-        <tr>
-          <th>EMPLOYEEID </th>
-          <th>DEPTID</th>
-          <th>DEPARTMENT_NAME</th>
-          <th>FIRSTNAME</th>
-          <th>LASTNAME </th>
-          <th>AGE</th>
-          <th>GENDER</th>
-          <th>DESIGNATION</th>
-          <th>SALARY</th>
-        </tr>
-      </thead>
-      <tbody>
-      <!-- jinja2 Technique -->
-    
-      {% for i in query2 %}
-        <tr>
-          
-          <td>{{i.EMPLOYEEID}}</td>
-          <td>{{i.DEPTID}}</td>
-          <td>{{i.DEPARTMENT_NAME}}</td>
-          <td>{{i.FIRSTNAME}}</td>
-          <td>{{i.LASTNAME}}</td>
-          <td>{{i.AGE}}</td>
-          <td>{{i.GENDER}}</td>
-          <td>{{i.DESIGNATION}}</td>
-          <td>{{i.SALARY}}</td>
-        </tr>
-      {% endfor %}
- 
-      </tbody>
-    </table>
-  </div>
 
 
     {% comment %} <div class="home-content">

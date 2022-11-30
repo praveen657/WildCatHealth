@@ -1,6 +1,4 @@
 
-
-
 {% comment %} {% extends 'dashboard/doctorbase.html'%}
 
 
@@ -484,7 +482,7 @@
     </div>
       <ul class="nav-links">
         <li>
-          <a href="{% url 'adminstats' %}" class="active" >
+          <a href="{% url 'adminstats' %}" >
             <i class='bx bx-grid-alt' ></i>
             <span class="links_name">Dashboard</span>
           </a>
@@ -496,7 +494,7 @@
           </a>
         </li>
         <li>
-          <a href="{% url 'adminstats-equipmentsearch' %}" >
+          <a href="{% url 'adminstats-equipmentsearch' %}" class="active">
             <i class='bx bx-list-ul' ></i>
             <span class="links_name">Equip Detials</span>
           </a>
@@ -508,7 +506,7 @@
           </a>
         </li>
         <li>
-          <a href="{% url 'adminstats-appointmentsearch' %}" >
+          <a href="{% url 'adminstats-appointmentsearch' %}" class="active">
             <i class='bx bx-coin-stack' ></i>
             <span class="links_name">App Search</span>
           </a>
@@ -541,7 +539,27 @@
     </nav>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<div class="container" style="width:40%; margin-left: 0; ">
+<form method = "GET" action = "adminstats-patientbill">
+	{%csrf_token%}
+   
+	<h4> Pending Bills Search Amount </h4> <br>
 
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+		  <span class="input-group-text" id="basic-addon1">@</span>
+		</div>
+		<input type="text" id="patientid" name="patientid" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+		&nbsp &nbsp<button type="submit" name="submit" value = "submit" type="button" class="btn btn-dark">Submit</button>
+	</div>
+ 
+	 
+</form>
+</div>
 
 
  {% comment %} {% for x in query %}
@@ -557,114 +575,6 @@
 <br>
 <br>
 <br> {% endcomment %}
-<br>
-<br>
-
-<div class="container">
-    <h4 >Patients with pending Bill > 5000</h4><br> 
-    <table class="table thead-light ">
-      <thead>
-        <tr>
-          <th>PATIENTID </th>
-          <th>FIRSTNAME</th>
-          <th>LASTNAME</th>
-          <th>AGE</th>
-          <th>GENDER </th>
-          <th>PHONENO</th>
-          <th>BILL_DUE</th>
-        </tr>
-      </thead>
-      <tbody>
-      <!-- jinja2 Technique -->
-    
-      {% for i in query %}
-        <tr>
-          
-          <td>{{i.PATIENTID}}</td>
-          <td>{{i.FIRSTNAME}}</td>
-          <td>{{i.LASTNAME}}</td>
-          <td>{{i.AGE}}</td>
-          <td>{{i.GENDER}}</td>
-          <td>{{i.PHONENO}}</td>
-          <td>{{i.BILL_DUE}}</td>
-        </tr>
-      {% endfor %}
- 
-      </tbody>
-    </table>
-  </div>
-    
-  <div class="container">
-    <h4>Appointments in each department</h4><br> 
-    <table class="table thead-light ">
-      <thead>
-        <tr>
-          <th>DEPTNAME </th>
-          <th>EMPLOYEE_FIRSTNAME</th>
-          <th>EMPLOYEE_LASTNAME</th>
-          <th>APPOINTMENTID</th>
-          <th>PATIENTID </th>
-          <th>APPOINTMENT_DATE</th>
-          <th>APPOINTMENT_TIME</th>
-        </tr>
-      </thead>
-      <tbody>
-      <!-- jinja2 Technique -->
-    
-      {% for i in query1 %}
-        <tr>
-          
-          <td>{{i.DEPTNAME}}</td>
-          <td>{{i.EMPLOYEE_FIRSTNAME}}</td>
-          <td>{{i.EMPLOYEE_LASTNAME}}</td>
-          <td>{{i.APPOINTMENTID}}</td>
-          <td>{{i.PATIENTID}}</td>
-          <td>{{i.APPOINTMENT_DATE}}</td>
-          <td>{{i.APPOINTMENT_DATE}}</td>
-        </tr>
-      {% endfor %}
- 
-      </tbody>
-    </table>
-  </div>
-
-  <div class="container">
-    <h4>Highest Paid Medical Staff in each Department</h4><br> 
-    <table class="table thead-light ">
-      <thead>
-        <tr>
-          <th>EMPLOYEEID </th>
-          <th>DEPTID</th>
-          <th>DEPARTMENT_NAME</th>
-          <th>FIRSTNAME</th>
-          <th>LASTNAME </th>
-          <th>AGE</th>
-          <th>GENDER</th>
-          <th>DESIGNATION</th>
-          <th>SALARY</th>
-        </tr>
-      </thead>
-      <tbody>
-      <!-- jinja2 Technique -->
-    
-      {% for i in query2 %}
-        <tr>
-          
-          <td>{{i.EMPLOYEEID}}</td>
-          <td>{{i.DEPTID}}</td>
-          <td>{{i.DEPARTMENT_NAME}}</td>
-          <td>{{i.FIRSTNAME}}</td>
-          <td>{{i.LASTNAME}}</td>
-          <td>{{i.AGE}}</td>
-          <td>{{i.GENDER}}</td>
-          <td>{{i.DESIGNATION}}</td>
-          <td>{{i.SALARY}}</td>
-        </tr>
-      {% endfor %}
- 
-      </tbody>
-    </table>
-  </div>
 
 
     {% comment %} <div class="home-content">
