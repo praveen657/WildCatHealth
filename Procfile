@@ -1,1 +1,1 @@
-web gunicorn HMS-Project.wsgi:application --log-file -
+web gunicorn HMS_Project.wsgi:application --log-file -
